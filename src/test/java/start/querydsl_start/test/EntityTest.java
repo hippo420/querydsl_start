@@ -48,11 +48,15 @@ public class EntityTest {
         em.flush();;
         em.clear();
 
+
+
+        //조회
         List<Member> memberList = em.createQuery("select m from Member m", Member.class)
                 .getResultList();
 
+        List<Team> teamList = em.createQuery("select t from Team t", Team.class)
+                .getResultList();
         memberList.stream().forEach(m -> System.out.println(m));
-        //조회
-
+        teamList.stream().forEach(t -> System.out.println(t));
     }
 }

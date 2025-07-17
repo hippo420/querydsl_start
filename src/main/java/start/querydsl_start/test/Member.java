@@ -34,4 +34,13 @@ public class Member {
     public Member() {
 
     }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "age=" + age +
+                ", name='" + name + '\'' +
+                ", id=" + id +
+                '}';
+    }
 }

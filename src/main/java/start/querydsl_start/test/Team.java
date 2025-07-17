@@ -1,16 +1,14 @@
 package start.querydsl_start.test;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
 @Setter @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"id", "name"})
 public class Team {
 
     @Id
