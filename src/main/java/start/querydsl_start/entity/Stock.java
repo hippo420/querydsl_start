@@ -14,7 +14,7 @@ import java.util.List;
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "item"})
-@Table(name="stock",schema = "DEV",uniqueConstraints = {@UniqueConstraint(
+@Table(name="stock",uniqueConstraints = {@UniqueConstraint(
         name = "ITEM_NAME_UNIQUE",
         columnNames = {"ITEM", "NAME"}
 )})
