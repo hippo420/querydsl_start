@@ -2,12 +2,14 @@ package start.querydsl_start.test;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 @Entity
 @Setter @Getter
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Slf4j
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "name"})
 public class Team {
 
@@ -21,10 +23,11 @@ public class Team {
     private List<Member> member;
 
     public Team(String name) {
+        System.out.println(this.getClass().getName()+" 의 커스텀생성자 입니다.");
         this.name = name;
     }
 
     public Team() {
-
+        System.out.println(this.getClass().getName()+" 의 기본생성자 입니다.");
     }
 }
