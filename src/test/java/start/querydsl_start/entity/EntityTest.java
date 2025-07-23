@@ -1,4 +1,4 @@
-package start.querydsl_start.test;
+package start.querydsl_start.entity;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

@@ -1,12 +1,10 @@
-package start.querydsl_start.test;
+package start.querydsl_start.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Entity
 @Setter
