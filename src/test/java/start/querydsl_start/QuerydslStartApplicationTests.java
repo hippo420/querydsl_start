@@ -8,8 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class QuerydslStartApplicationTests {
 
-    @PersistenceContext
-    EntityManager em;
+
 
     @Test
     void contextLoads() {

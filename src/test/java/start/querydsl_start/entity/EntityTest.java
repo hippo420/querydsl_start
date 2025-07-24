@@ -45,7 +45,7 @@ public class EntityTest {
         em.persist(member6);
         em.persist(member7);
 
-        em.flush();;
+        em.flush();
         em.clear();
 
 
@@ -59,4 +59,5 @@ public class EntityTest {
         memberList.stream().forEach(m -> System.out.println(m));
         teamList.stream().forEach(t -> System.out.println(t));
     }
+
 }

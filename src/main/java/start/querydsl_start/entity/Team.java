@@ -11,10 +11,16 @@ import java.util.List;
 @Slf4j
 //@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "name"})
+@SequenceGenerator(
+        name="TEAM_SEQ_GENERATOR",
+        sequenceName = "TEAM_SEQ",
+        initialValue = 1,
+        allocationSize = 20
+)
 public class Team {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TEAM_SEQ_GENERATOR")
     private Long id;
 
     private String name;

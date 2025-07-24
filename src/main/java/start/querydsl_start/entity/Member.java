@@ -5,13 +5,22 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Table;
 
 @Entity
 @Setter
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@TableGenerator(
+        name="TABLE_SEQ_GENERATOR",
+        table = "SEQ_TBL",
+        pkColumnName ="SEQ_TYCD",
+        pkColumnValue = "MEMBER_SEQ",
+        allocationSize = 1
+)
 public class Member {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.TABLE,generator = "TABLE_SEQ_GENERATOR")
     @Column(name="memer_id")
     private Long id;
 
