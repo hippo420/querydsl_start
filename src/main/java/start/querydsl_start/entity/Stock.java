@@ -52,5 +52,13 @@ public class Stock {
     @Transient
     private String data1;
 
+    public Stock(String item, String name, BigDecimal price, Long qty, StockType type, String remark) {
+        this.item = item;
+        this.name = name;
+        this.price = price;
+        this.qty = qty;
+        this.type = type;
+        this.remark = remark;
+    }
 
 }

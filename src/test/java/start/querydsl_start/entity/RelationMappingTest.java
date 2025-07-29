@@ -57,24 +57,25 @@ public class RelationMappingTest {
     @Rollback(false)
     void testDualRelation(){
         Team be_dev = new Team("백엔드개발팀");
-
+        em.persist(be_dev);
 
         Member member1 = new Member("개발자1",27);
         Member member2 = new Member("개발자2",33);
         Member member3 = new Member("개발자3",40);
+
+        member1.setTeam(be_dev);
+        member2.setTeam(be_dev);
+        member3.setTeam(be_dev);
+
         em.persist(member1);
         em.persist(member2);
         em.persist(member3);
 
-
         //연관관계 주인값 누락함.
         Member member4 = new Member("개발자4",40);
         em.persist(member4);
-        be_dev.getMember().add(member1);
-        be_dev.getMember().add(member2);
-        be_dev.getMember().add(member3);
         be_dev.getMember().add(member4);
-        em.persist(be_dev);
+
 
         em.flush();
         em.clear();
