@@ -1,26 +1,19 @@
-package start.querydsl_start.entity;
+package start.querydsl_start.realation;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Table;
 
 @Entity
 @Setter
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@TableGenerator(
-        name="TABLE_SEQ_GENERATOR",
-        table = "SEQ_TBL",
-        pkColumnName ="SEQ_TYCD",
-        pkColumnValue = "MEMBER_SEQ",
-        allocationSize = 1
-)
-public class Member {
+
+public class OneMember {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE,generator = "TABLE_SEQ_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="memer_id")
     private Long id;
 
@@ -30,20 +23,15 @@ public class Member {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="team_id")
-    private Team team;
+    private OneTeam team;
 
-    public Member(String name, int age,Team team) {
+    public OneMember(String name, int age, OneTeam team) {
         this.name = name;
         this.age = age;
         this.team = team;
     }
 
-    public Member(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-
-    public Member() {
+    public OneMember() {
 
     }
 

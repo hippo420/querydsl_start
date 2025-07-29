@@ -29,6 +29,7 @@ public class EntityTest {
         em.persist(db);
         em.persist(sys);
 
+        //연관관계주인 값 설정함
         Member member1 = new Member("개발자1",27,be_dev);
         Member member2 = new Member("개발자2",33,be_dev);
         Member member3 = new Member("개발자2",40,fe_dev);
@@ -36,6 +37,8 @@ public class EntityTest {
         Member member5 = new Member("개발자2",50,sys);
         Member member6 = new Member("개발자2",18,db);
         Member member7 = new Member("개발자2",43,be_dev);
+
+
 
         em.persist(member1);
         em.persist(member2);
