@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,7 +27,7 @@ public class Team {
     private String name;
 
     @OneToMany(mappedBy="team")
-    private List<Member> member;
+    private List<Member> member = new ArrayList<>();
 
     public Team(String name) {
         System.out.println(this.getClass().getName()+" 의 커스텀생성자 입니다.");

@@ -32,6 +32,19 @@ public class Member {
     @JoinColumn(name="team_id")
     private Team team;
 
+
+    //연관관계 편의 메소드
+    public void setTeam(Team team) {
+        //기존팀 관계 제거
+        if(this.team != null){
+            //관계제거
+            this.team.getMember().remove(this);
+        }
+        //새로운 팀 및 관계추가
+        this.team = team;
+        team.getMember().add(this);
+    }
+
     public Member(String name, int age,Team team) {
         this.name = name;
         this.age = age;

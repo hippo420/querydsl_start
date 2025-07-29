@@ -94,4 +94,38 @@ public class RelationMappingTest {
 
     }
 
+    @Test
+    @DisplayName("연관관계 편의 메소드")
+    @Transactional
+    @Rollback(false)
+    void testRefMethod(){
+        Team be_dev = new Team("백엔드개발팀");
+        Team fe_dev = new Team("프론트엔드개발팀");
+        em.persist(be_dev);
+        em.persist(fe_dev);
+
+        Member member1 = new Member("개발자1",27,be_dev);
+        Member member2 = new Member("개발자2",33,be_dev);
+        Member member3 = new Member("개발자3",40,be_dev);
+
+        em.persist(member1);
+        em.persist(member2);
+        em.persist(member3);
+        member3.setTeam(fe_dev);
+
+        em.flush();
+        em.clear();
+
+        //조회
+        List<Member> memberList = em.createQuery("select m from Member m", Member.class)
+                .getResultList();
+
+        List<Team> teamList = em.createQuery("select t from Team t", Team.class)
+                .getResultList();
+        memberList.stream().forEach(m -> System.out.println(m));
+        teamList.stream().forEach(t -> System.out.println(t));
+
+
+    }
+
 }
