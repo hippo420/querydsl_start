@@ -5,7 +5,9 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Table;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Setter
@@ -32,6 +34,13 @@ public class Member {
     @JoinColumn(name="team_id")
     private Team team;
 
+
+    //다대다 관계
+    @ManyToMany
+    @JoinTable(name="MEMBER_PRODUCT",
+                joinColumns = @JoinColumn(name="MEMBER_ID"),
+                inverseJoinColumns = @JoinColumn(name="PRODUCT_ID"))
+    private List<Product> products = new ArrayList<>();
 
     //연관관계 편의 메소드
     public void setTeam(Team team) {
