@@ -54,6 +54,12 @@ public class Member {
         team.getMember().add(this);
     }
 
+    //연관관계 편의메서드
+    public void addProduct(Product product) {
+        products.add(product);
+        product.getMembers().add(this);
+    }
+
     public Member(String name, int age,Team team) {
         this.name = name;
         this.age = age;

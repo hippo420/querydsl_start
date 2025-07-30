@@ -3,6 +3,7 @@ package start.querydsl_start.entity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +12,7 @@ import start.querydsl_start.realation.OneMember;
 import start.querydsl_start.realation.OneTeam;
 
 import java.util.List;
-
+@Slf4j
 @SpringBootTest
 public class RelationMappingTest {
 
@@ -47,8 +48,8 @@ public class RelationMappingTest {
 
         List<OneTeam> teamList = em.createQuery("select t from OneTeam t", OneTeam.class)
                 .getResultList();
-        memberList.stream().forEach(m -> System.out.println(m));
-        teamList.stream().forEach(t -> System.out.println(t));
+        memberList.stream().forEach(m -> log.info("MEMBER -> {}",m));
+        teamList.stream().forEach(t -> log.info("TEAM -> {}",t));
     }
 
     @Test
@@ -124,6 +125,46 @@ public class RelationMappingTest {
                 .getResultList();
         memberList.stream().forEach(m -> System.out.println(m));
         teamList.stream().forEach(t -> System.out.println(t));
+
+
+    }
+
+
+    @Test
+    @DisplayName("다대다 [N:N]매핑-단방향 테스트")
+    @Transactional
+    @Rollback(false)
+    void testManyToManyRelation1(){
+        Product p1 = new Product("제품1");
+        em.persist(p1);
+
+        Member m1 = new Member();
+        m1.setName("멤버1");
+        m1.getProducts().add(p1);
+        em.persist(m1);
+
+
+        em.flush();
+        em.clear();
+
+        //조회
+        List<Product> products = em.createQuery("select t from Product t", Product.class)
+                .getResultList();
+
+        List<Member> members = em.createQuery("select t from Member t", Member.class)
+                .getResultList();
+
+        products.stream().forEach(m -> log.info("Product -> {}", m));
+        members.stream().forEach(t -> log.info("Member -> {}", t));
+    }
+
+
+    @Test
+    @DisplayName("다대다 [N:N]매핑-양방향 테스트")
+    @Transactional
+    @Rollback(false)
+    void testManyToManyRelation2(){
+
 
 
     }
