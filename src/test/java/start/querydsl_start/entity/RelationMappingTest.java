@@ -160,13 +160,35 @@ public class RelationMappingTest {
 
 
     @Test
-    @DisplayName("다대다 [N:N]매핑-양방향 테스트")
+    @DisplayName("다대다 [N:N]매핑-식별자")
     @Transactional
     @Rollback(false)
     void testManyToManyRelation2(){
+        Member m1 = new Member();
+        m1.setName("멤버1");
+        em.persist(m1);
 
+        Product p1 = new Product();
+        p1.setName("상품1");
+        em.persist(p1);
 
+        MemberProduct mp1 = new MemberProduct();
+        mp1.setMember(m1);
+        mp1.setProduct(p1);
+        mp1.setOrderDate("2025-07-31");
+        em.persist(mp1);
 
+        em.flush();
+        em.clear();
+
+        MemberProduct mp = em.find(MemberProduct.class,mp1);
+        Member m = mp.getMember();
+        Product p = mp.getProduct();
+        String od = mp.getOrderDate();
+
+        log.info("MEMBER-> {}",m);
+        log.info("PRODUCT-> {}",p);
+        log.info("ORDER_DATE-> {}",m);
     }
 
 }
