@@ -17,7 +17,7 @@ import lombok.*;
 public class Fund {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE,generator = "TABLE_SEQ_GENERATOR")
-    @Column(name="fund_id")
+    @Column(name="FUND_ID")
     private Long id;
 
     private String code;

@@ -23,7 +23,7 @@ import java.util.List;
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE,generator = "TABLE_SEQ_GENERATOR")
-    @Column(name="memer_id")
+    @Column(name="MEMBER_ID")
     private Long id;
 
     private String name;
@@ -31,16 +31,19 @@ public class Member {
     private int age;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="team_id")
+    @JoinColumn(name="TEAM_ID")
     private Team team;
 
 
     //다대다 관계
     @ManyToMany
-    @JoinTable(name="MEMBER_PRODUCT",
+    @JoinTable(name="MemberProduct",
                 joinColumns = @JoinColumn(name="MEMBER_ID"),
                 inverseJoinColumns = @JoinColumn(name="PRODUCT_ID"))
     private List<Product> products = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<MemberProduct> memberProducts = new ArrayList<>();
 
     //연관관계 편의 메소드
     public void setTeam(Team team) {

@@ -188,7 +188,7 @@ public class RelationMappingTest {
 
         log.info("MEMBER-> {}",m);
         log.info("PRODUCT-> {}",p);
-        log.info("ORDER_DATE-> {}",m);
+        log.info("ORDER_DATE-> {}",od);
     }
 
 }
