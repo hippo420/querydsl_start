@@ -8,6 +8,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
+import start.querydsl_start.entity.advancedMapping.inherit.concreate.Kia;
+import start.querydsl_start.entity.advancedMapping.inherit.concreate.Porsche;
 import start.querydsl_start.entity.advancedMapping.inherit.join.Book;
 import start.querydsl_start.entity.advancedMapping.inherit.join.Item;
 import start.querydsl_start.entity.advancedMapping.inherit.join.Movie;
@@ -84,7 +86,7 @@ public class EntityAdvancedMappingTest {
         List<IPhone> res1 = em.createQuery("select m from IPhone m", IPhone.class)
                 .getResultList();
         //조회
-        List<Galaxy> res2 = em.createQuery("select m from Galaxy m", Galaxy.class)
+        List<Galaxy> res2 = em.createQuery("select m from Porsche m", Galaxy.class)
                 .getResultList();
 
         //조회, DTYPE이 설정된 경우, JPA가 각 행에 저장된 클래스 타입을 구분하는 컬럼을 자동 생성
@@ -96,5 +98,30 @@ public class EntityAdvancedMappingTest {
         res2.stream().forEach(r2 -> log.info("Result2: {}", r2));
 
         res3.stream().forEach(r3 -> log.info("Result3: {}", r3));
+    }
+
+    @Test
+    @DisplayName("엔티티 상속매핑 - [클래스구현전략] 테스트")
+    @Transactional
+    @Rollback(false)
+    void testInheritanceByConcreate()
+    {
+        Kia car1 = new Kia("K5","3000천만원");
+        Porsche car2 = new Porsche("porsche911","2억","F1 팀 있음");
+        em.persist(car1);
+        em.persist(car2);
+        em.flush();
+        em.clear();
+
+        //조회
+        List<Kia> res1 = em.createQuery("select m from Kia m", Kia.class)
+                .getResultList();
+        List<Porsche> res2 = em.createQuery("select m from Porsche m", Porsche.class)
+                .getResultList();
+
+        res1.stream().forEach(r1 -> log.info("Result1: {}", r1));
+        res2.stream().forEach(r2 -> log.info("Result2: {}", r2));
+
+
     }
 }
