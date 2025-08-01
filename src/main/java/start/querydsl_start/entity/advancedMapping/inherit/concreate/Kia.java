@@ -13,16 +13,11 @@ public class Kia{
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="KIA_ID")
     private Long id;
-
     private String name;
-
     private String price;
 
     public Kia(String name, String price) {
         this.name = name;
         this.price = price;
     }
-
-
-
 }

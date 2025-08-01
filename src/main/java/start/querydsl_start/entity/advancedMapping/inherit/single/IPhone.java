@@ -20,7 +20,4 @@ public class IPhone extends Phone {
     public IPhone(String tMoney) {
         this.tMoney=tMoney;
     }
-
-
-
 }

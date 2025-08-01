@@ -20,7 +20,4 @@ public class Galaxy extends Phone {
     public Galaxy(String kPassCard) {
         this.kPassCard=kPassCard;
     }
-
-
-
 }

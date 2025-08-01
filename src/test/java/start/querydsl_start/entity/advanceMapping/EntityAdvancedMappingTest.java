@@ -3,6 +3,7 @@ package start.querydsl_start.entity.advanceMapping;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,10 @@ import start.querydsl_start.entity.advancedMapping.inherit.join.Movie;
 import start.querydsl_start.entity.advancedMapping.inherit.single.Galaxy;
 import start.querydsl_start.entity.advancedMapping.inherit.single.IPhone;
 import start.querydsl_start.entity.advancedMapping.inherit.single.Phone;
+import start.querydsl_start.entity.advancedMapping.inherit.superclass.Buyer;
+import start.querydsl_start.entity.advancedMapping.inherit.superclass.Seller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Slf4j
@@ -86,7 +90,7 @@ public class EntityAdvancedMappingTest {
         List<IPhone> res1 = em.createQuery("select m from IPhone m", IPhone.class)
                 .getResultList();
         //조회
-        List<Galaxy> res2 = em.createQuery("select m from Porsche m", Galaxy.class)
+        List<Galaxy> res2 = em.createQuery("select m from Galaxy m", Galaxy.class)
                 .getResultList();
 
         //조회, DTYPE이 설정된 경우, JPA가 각 행에 저장된 클래스 타입을 구분하는 컬럼을 자동 생성
@@ -121,7 +125,35 @@ public class EntityAdvancedMappingTest {
 
         res1.stream().forEach(r1 -> log.info("Result1: {}", r1));
         res2.stream().forEach(r2 -> log.info("Result2: {}", r2));
+    }
 
+    @Test
+    @DisplayName("엔티티 상속매핑 - [MappingSuperclass] 테스트")
+    @Transactional
+    @Rollback(false)
+    void testInheritanceByMappingSuperclass()
+    {
+        Buyer buyer = new Buyer();
+        buyer.setName("젠슨황");
+        buyer.setCompany("엔디비아");
+        buyer.setAccount(BigDecimal.valueOf(20310389327819L));
+        Seller seller = new Seller();
 
+        seller.setName("판매자");
+        seller.setCompany("삼성전자");
+        seller.setCertification("QA테스트완료");
+        em.persist(buyer);
+        em.persist(seller);
+        em.flush();
+        em.clear();
+
+        //조회
+        List<Buyer> res1 = em.createQuery("select m from Buyer m", Buyer.class)
+                .getResultList();
+        List<Seller> res2 = em.createQuery("select m from Seller m", Seller.class)
+                .getResultList();
+
+        res1.stream().forEach(r1 -> log.info("Result1: {}", r1));
+        res2.stream().forEach(r2 -> log.info("Result2: {}", r2));
     }
 }
