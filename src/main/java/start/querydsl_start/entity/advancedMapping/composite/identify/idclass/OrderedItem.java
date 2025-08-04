@@ -8,7 +8,7 @@ public class OrderedItem {
     @Id
     @ManyToOne
     @JoinColumns({@JoinColumn(name="ORDER_ID"),
-                 @JoinColumn(name="")})
+                 @JoinColumn(name="ORDER_DETAIL_ID")})
     @GeneratedValue
     private OrderDetail orderDetail;
 

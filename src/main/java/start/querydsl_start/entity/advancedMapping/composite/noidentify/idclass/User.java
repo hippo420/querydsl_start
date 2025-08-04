@@ -5,7 +5,6 @@ import lombok.*;
 
 @Entity
 @Setter @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString( of = {"id","name"})
 @IdClass(UserId.class)
 public class User {
@@ -21,6 +20,4 @@ public class User {
     private Long id2;
 
     private String name;
-
-
 }

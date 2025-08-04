@@ -3,7 +3,6 @@ package start.querydsl_start.entity.advanceMapping;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +24,7 @@ import java.util.List;
 
 @Slf4j
 @SpringBootTest
-public class EntityAdvancedMappingTest {
+public class EntityInheritTest {
 
     @PersistenceContext
     EntityManager em;

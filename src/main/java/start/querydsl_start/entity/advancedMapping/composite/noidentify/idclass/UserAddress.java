@@ -4,15 +4,12 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Setter
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter @Getter
 @ToString( of = {"id","user"})
 public class UserAddress {
     @Id
     @GeneratedValue
     private Long id;
-
 
     @ManyToOne
     @JoinColumns({
