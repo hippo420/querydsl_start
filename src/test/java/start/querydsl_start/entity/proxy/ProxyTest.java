@@ -12,6 +12,8 @@ import start.querydsl_start.proxy.eager.Driver;
 import start.querydsl_start.proxy.eager.License;
 import start.querydsl_start.proxy.entity.Department;
 import start.querydsl_start.proxy.entity.Employee;
+import start.querydsl_start.proxy.lazy.Invoice;
+import start.querydsl_start.proxy.lazy.InvoiceLine;
 
 import java.util.List;
 @Slf4j
@@ -68,7 +70,6 @@ public class ProxyTest {
     @Rollback(false)
     void testEagerLoading()
     {
-
         License license1 = new License();
         license1.setId(1L);
         license1.setName("장롱면허");
@@ -95,8 +96,32 @@ public class ProxyTest {
     @Rollback(false)
     void testLazyLoading()
     {
+        InvoiceLine invoiceLine = new InvoiceLine();
+        invoiceLine.setId(1L);
+        invoiceLine.setName("노트북");
+        invoiceLine.setQty(300L);
 
+        Invoice invoice = new Invoice();
+        invoice.setId(1L);
+        invoice.setName("1234-구매청구서");
+        invoice.setInvoiceLine(invoiceLine);
+        em.persist(invoice);
 
+        em.flush();
+        em.clear();
+
+        //조회
+        Invoice res1 = em.find(Invoice.class,1L);
+        log.info("#-----Invoice 내역-----#");
+
+        log.info("# 순번 : {}",res1.getId());
+        log.info("# 제목 : {}",res1.getName());
+        log.info("#-----Invoice 내역 END-----#");
+
+        log.info("#-----Invoice 상세내역 -----#");
+        log.info("# 물품순번 : {}번",res1.getInvoiceLine().getId());
+        log.info("# 물품명 : {}",res1.getInvoiceLine().getName());
+        log.info("# 물품수량 : {}EA",res1.getInvoiceLine().getQty());
 
     }
 

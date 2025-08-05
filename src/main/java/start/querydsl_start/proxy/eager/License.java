@@ -18,6 +18,4 @@ public class License {
     private Long id;
 
     private String name;
-
-
 }
