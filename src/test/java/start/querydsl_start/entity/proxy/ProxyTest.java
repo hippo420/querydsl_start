@@ -8,6 +8,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
+import start.querydsl_start.proxy.eager.Driver;
+import start.querydsl_start.proxy.eager.License;
 import start.querydsl_start.proxy.entity.Department;
 import start.querydsl_start.proxy.entity.Employee;
 
@@ -61,26 +63,41 @@ public class ProxyTest {
 
 
     @Test
-    @DisplayName("다대일 - 양방향매핑 테스트")
+    @DisplayName("즉시로딩 테스트")
     @Transactional
     @Rollback(false)
-    void testManyToOne_OneToMany()
+    void testEagerLoading()
     {
 
+        License license1 = new License();
+        license1.setId(1L);
+        license1.setName("장롱면허");
+        em.persist(license1);
 
-        em.persist(null);
-
+        Driver driver1 = new Driver();
+        driver1.setId(1L);
+        driver1.setName("운전자!!!");
+        driver1.setLicense(license1);
+        em.persist(driver1);
+        
         em.flush();
         em.clear();
 
-
-
         //조회
-        List<Object> res1 = em.createQuery("select m from Stock m", Object.class)
-                .getResultList();
+        Driver res1 = em.find(Driver.class,1L);
+        log.info("Driver : {}",res1.getId());
+        log.info("Driver : {}",res1.getName());
+    }
+
+    @Test
+    @DisplayName("지연로딩 테스트")
+    @Transactional
+    @Rollback(false)
+    void testLazyLoading()
+    {
 
 
-        res1.stream().forEach(r -> System.out.println(r));
+
     }
 
 }
