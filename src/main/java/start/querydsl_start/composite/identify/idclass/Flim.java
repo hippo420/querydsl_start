@@ -10,10 +10,10 @@ import lombok.ToString;
 @Entity
 @Getter @Setter
 @ToString(of={"id","name"})
-public class Movie {
+public class Flim {
 
     @Id
-    @Column(name="MOVIE_ID")
+    @Column(name="FLIM_ID")
     private Long id;
 
     private String name;

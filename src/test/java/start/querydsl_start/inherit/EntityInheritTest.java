@@ -50,7 +50,7 @@ public class EntityInheritTest {
         em.clear();
 
         //조회
-        List<Movie> res1 = em.createQuery("select m from Movie m", Movie.class)
+        List<Movie> res1 = em.createQuery("select m from Flim m", Movie.class)
                 .getResultList();
         //조회
         List<Book> res2 = em.createQuery("select m from Book m", Book.class)

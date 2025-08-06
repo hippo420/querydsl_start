@@ -5,24 +5,24 @@ import lombok.ToString;
 import java.io.Serializable;
 import java.util.Objects;
 
-@ToString(of={"",""})
+@ToString(of={"flim","actorId"})
 public class ActorId implements Serializable {
-    private Long movie;
+    private Long flim;
     private Long actorId;
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         ActorId actorId1 = (ActorId) o;
-        return Objects.equals(movie, actorId1.movie) && Objects.equals(actorId, actorId1.actorId);
+        return Objects.equals(flim, actorId1.flim) && Objects.equals(actorId, actorId1.actorId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(movie, actorId);
+        return Objects.hash(flim, actorId);
     }
     public ActorId(Long movie, Long actorId) {
-        this.movie = movie;
+        this.flim = movie;
         this.actorId = actorId;
     }
 

@@ -1,8 +1,10 @@
 package start.querydsl_start.composite.identify.idclass;
 
+import lombok.ToString;
+
 import java.io.Serializable;
 import java.util.Objects;
-
+@ToString(of={"Actor","id"})
 public class PersonId implements Serializable {
 
     private ActorId Actor; //Person.actor매핑

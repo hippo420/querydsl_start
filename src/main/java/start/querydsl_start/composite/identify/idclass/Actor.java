@@ -13,8 +13,8 @@ public class Actor {
 
     @Id
     @ManyToOne
-    @JoinColumn(name="MOVIE_ID")
-    private Movie movie;
+    @JoinColumn(name="FLIM_ID")
+    private Flim flim;
 
     @Id
     @Column(name="ACTOR_ID")

@@ -14,7 +14,7 @@ public class Person {
     @Id
     @ManyToOne
     @JoinColumns({
-            @JoinColumn(name="MOVIE_ID"),
+            @JoinColumn(name="FLIM_ID"),
             @JoinColumn(name="ACTOR_ID")
     })
     private Actor Actor;

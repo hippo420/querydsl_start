@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import start.querydsl_start.composite.identify.idclass.ActorId;
-import start.querydsl_start.composite.identify.idclass.Movie;
+import start.querydsl_start.composite.identify.idclass.Flim;
 
 @Entity
 @Getter @Setter
@@ -18,7 +17,7 @@ public class ActorV1 {
     @MapsId("actorId")     //ActorV1Id.actorId매핑
     @ManyToOne
     @JoinColumn(name="MOVIE_ID")
-    private Movie movie;
+    private Flim flim;
 
     private String name;
 }
