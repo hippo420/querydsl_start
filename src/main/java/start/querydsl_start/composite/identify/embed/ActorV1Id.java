@@ -2,12 +2,15 @@ package start.querydsl_start.composite.identify.embed;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.ToString;
 import start.querydsl_start.composite.identify.idclass.ActorId;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
+
+@ToString(of={"actorId","id"})
 public class ActorV1Id implements Serializable {
     private Long actorId;
 

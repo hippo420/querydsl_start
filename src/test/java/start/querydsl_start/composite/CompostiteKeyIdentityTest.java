@@ -8,6 +8,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
+import start.querydsl_start.composite.identify.embed.ActorV1;
+import start.querydsl_start.composite.identify.embed.ActorV1Id;
+import start.querydsl_start.composite.identify.embed.MovieV1;
 import start.querydsl_start.composite.identify.idclass.*;
 import start.querydsl_start.inherit.join.Movie;
 
@@ -74,7 +77,36 @@ public class CompostiteKeyIdentityTest {
     @Rollback(false)
     void testIdentify_Embedded()
     {
+        // MovieV1 엔티티 저장
+        MovieV1 movie = new MovieV1();
+        movie.setId(1L);
+        movie.setName("Inception");
+        em.persist(movie);
 
+        // ActorV1Id 복합키 생성
+        ActorV1Id actorV1Id = new ActorV1Id(100L, 1L); // actorId, movieId
+
+        // ActorV1 엔티티 저장
+        ActorV1 actor = new ActorV1();
+        actor.setId(actorV1Id);
+        actor.setMovieV1(movie); // MovieV1 객체를 set
+        actor.setName("Leonardo DiCaprio");
+        em.persist(actor);
+
+        em.flush();
+        em.clear();
+
+        // 해당 MovieV1 엔티티 조회
+        MovieV1 res1 = em.find(MovieV1.class, 1L);
+        log.info("영화조회 : {}",res1);
+
+        // ActorV1Id 생성 (actorId, movieId)
+        ActorV1Id id = new ActorV1Id(100L, 1L);
+        log.info("복합키 ActorV1Id : {}",id);
+
+        // ActorV1 조회
+        ActorV1 found = em.find(ActorV1.class, id);
+        log.info("[{}]영화 배우 조회 : {}",res1.getName(),found);
     }
 
 

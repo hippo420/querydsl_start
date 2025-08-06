@@ -8,7 +8,7 @@ import start.querydsl_start.composite.identify.idclass.Flim;
 
 @Entity
 @Getter @Setter
-@ToString(of={"id","movie","name"})
+@ToString(of={"id","movieV1","name"})
 public class ActorV1 {
 
     @EmbeddedId
@@ -17,7 +17,7 @@ public class ActorV1 {
     @MapsId("actorId")     //ActorV1Id.actorId매핑
     @ManyToOne
     @JoinColumn(name="MOVIE_ID")
-    private Flim flim;
+    private MovieV1 movieV1;
 
     private String name;
 }
