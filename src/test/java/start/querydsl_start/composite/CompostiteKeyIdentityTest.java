@@ -8,6 +8,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
+import start.querydsl_start.composite.identify.embed.ActorV1Id;
+import start.querydsl_start.composite.identify.idclass.*;
 
 @Slf4j
 @SpringBootTest
@@ -23,6 +25,15 @@ public class CompostiteKeyIdentityTest {
     @Rollback(false)
     void testIdentify_IdClass()
     {
+        Person person = new Person();
+        person.setId(3L);
+        person.setName("Tom Crusie");
+        person.setAge(50);
+        em.persist(person);
+
+
+
+
 
     }
 
