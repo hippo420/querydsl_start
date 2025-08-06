@@ -16,41 +16,6 @@ public class CompostiteKeyIdentityTest {
     @PersistenceContext
     EntityManager em;
 
-    @Test
-    @DisplayName("엔티티 비식별관계 - [IdClass] 테스트")
-    @Transactional
-    @Rollback(false)
-    void testNonIdentify_IdClass()
-    {
-//        User user = new User();
-//        user.setId1(1L);
-//        user.setId2(2L);
-//        user.setName("사용자1");
-//        em.persist(user);
-//
-//        // 2. 사용자 주소(UserAddress) 생성
-//        UserAddress address = new UserAddress();
-//        address.setUser(user);
-//        em.persist(address);
-//
-//
-//        em.flush();
-//        em.clear();
-//
-//        //조회
-//        UserAddress foundAddress = em.find(UserAddress.class, address.getId());
-//        System.out.println("조회된 주소: " + foundAddress);
-//        System.out.println("주소에 연결된 사용자: " + foundAddress.getUser());
-    }
-
-    @Test
-    @DisplayName("엔티티 비식별관계 - [Embedded] 테스트")
-    @Transactional
-    @Rollback(false)
-    void testNonIdentify_Embedded()
-    {
-
-    }
 
     @Test
     @DisplayName("엔티티 식별관계 - [IdClass] 테스트")

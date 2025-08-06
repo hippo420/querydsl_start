@@ -8,6 +8,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
+import start.querydsl_start.composite.noidentify.embed.ChildV2;
+import start.querydsl_start.composite.noidentify.embed.ParentV2;
+import start.querydsl_start.composite.noidentify.embed.ParentV2Id;
 import start.querydsl_start.composite.noidentify.idclass.ChildV1;
 import start.querydsl_start.composite.noidentify.idclass.ParentV1;
 import start.querydsl_start.composite.noidentify.idclass.ParentV1Id;
@@ -55,26 +58,31 @@ public class CompostiteKeyNonIdentityTest {
     @Rollback(false)
     void testNonIdentify_Embedded()
     {
+        ParentV2Id id1 = new ParentV2Id(1L,2L);
+        ParentV2 parent = new ParentV2();
+        parent.setId(id1);
+        parent.setName("부모111");
+        em.persist(parent);
 
+        ChildV2 c = new ChildV2();
+        c.setId(1L);
+        c.setParentV2(parent);
+        c.setName("나는 자식이다.");
+        em.persist(c);
+
+        em.flush();
+        em.clear();
+
+
+
+        ChildV2 res1 = em.find(ChildV2.class,1L);
+        log.info("Result = {}",res1);
+
+        ParentV2Id pId =  res1.getParentV2().getId();
+        ParentV2 res = em.find(ParentV2.class,pId);
+        log.info("Result = {}",res);
     }
 
-    @Test
-    @DisplayName("엔티티 식별관계 - [IdClass] 테스트")
-    @Transactional
-    @Rollback(false)
-    void testIdentify_IdClass()
-    {
-
-    }
-
-    @Test
-    @DisplayName("엔티티 식별관계 - [Embedded] 테스트")
-    @Transactional
-    @Rollback(false)
-    void testIdentify_Embedded()
-    {
-
-    }
 
 
 }
