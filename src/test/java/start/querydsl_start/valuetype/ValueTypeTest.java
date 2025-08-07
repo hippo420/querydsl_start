@@ -14,6 +14,8 @@ import start.querydsl_start.composite.noidentify.embed.ParentV2Id;
 import start.querydsl_start.composite.noidentify.idclass.ChildV1;
 import start.querydsl_start.composite.noidentify.idclass.ParentV1;
 import start.querydsl_start.composite.noidentify.idclass.ParentV1Id;
+import start.querydsl_start.valuetype.collection.Call;
+import start.querydsl_start.valuetype.collection.Collect;
 import start.querydsl_start.valuetype.embeded.Festival;
 import start.querydsl_start.valuetype.embeded.Period;
 
@@ -65,7 +67,6 @@ public class ValueTypeTest {
         log.info("값복사 공유문제 해결 - clone()사용");
         Period p1 = new Period("20250701","20250801");
 
-
         Festival f1 = new Festival();
         f1.setName("남자월드컵");
         f1.setPrice(BigDecimal.valueOf(150000));
@@ -85,10 +86,68 @@ public class ValueTypeTest {
         List<Festival> res1 = em.createQuery("select m from Festival m", Festival.class).getResultList();
         res1.forEach( r -> log.info("{}",r));
 
+    }
+
+    @Test
+    @DisplayName("값타입 공유해결- [Embeded-불변객체사용] 테스트")
+    @Transactional
+    @Rollback(false)
+    void testValueType_EmbededV2() throws CloneNotSupportedException {
+        log.info("값복사 공유문제 해결 - 불변객체사용사용");
+        Period p1 = new Period("20250701","20250801");
+
+        Festival f1 = new Festival();
+        f1.setName("남자월드컵");
+        f1.setPrice(BigDecimal.valueOf(150000));
+        f1.setPeriod(p1);
+        em.persist(f1);
+
+        Period p2 = new Period(f1.getPeriod().getStartDate(),f1.getPeriod().getEndDate());
+        Festival f2 = new Festival();
+        f2.setName("여자월드컵");
+        f2.setPrice(BigDecimal.valueOf(150000));
+        p2.setStartDate("20230101");
+        f2.setPeriod(p2);
+        em.persist(f2);
+
+        em.flush();
+        em.clear();
+        List<Festival> res1 = em.createQuery("select m from Festival m", Festival.class).getResultList();
+        res1.forEach( r -> log.info("{}",r));
 
     }
 
 
+    @Test
+    @DisplayName("값타입 컬렉션 테스트")
+    @Transactional
+    @Rollback(false)
+    void testValueType_Collection() {
+        log.info("값타입 컬렉션 테스트");
+        Collect c1 =new Collect();
 
+        //임베디드
+        c1.setCall(new Call("QA테스터","개발자"));
 
+        //기본값 타입 컬렉션
+        c1.getInfos().add("배달의 민족");
+        c1.getInfos().add("스팸전화");
+        c1.getInfos().add("보험전화");
+        c1.getInfos().add("업무전화");
+
+        //임베디드 값타입 컬렉션
+        c1.getNumbers().add(new Call("나","친구1"));
+        c1.getNumbers().add(new Call("나","여자친구"));
+        c1.getNumbers().add(new Call("보험전화","나"));
+
+        em.persist(c1);
+        em.flush();
+        em.clear();
+
+        Collect c2 = em.find(Collect.class, 1L);
+        log.info("컬렉션 => id:{}",c2.getId());
+        log.info("Call 엔티티 => call:{}",c2.getCall());
+        log.info("기본값 타입 컬렉션 => infos:{}",c2.getInfos());
+        log.info("임베디드값 타입 컬렉션 => numbers:{}",c2.getNumbers());
+    }
 }

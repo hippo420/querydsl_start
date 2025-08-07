@@ -21,6 +21,8 @@ public class Period implements Cloneable{
     private String endDate;
 
     public Period(){}
+
+    //생성자로만 초기화시키면 됨.
     public Period(String startDate, String endDate){
         this.startDate = startDate;
         this.endDate = endDate;
