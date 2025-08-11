@@ -8,8 +8,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import start.querydsl_start.realation.OneMember;
-import start.querydsl_start.realation.OneTeam;
+import start.querydsl_start.constuct.OneMember;
+import start.querydsl_start.constuct.OneTeam;
 
 import java.util.List;
 @Slf4j

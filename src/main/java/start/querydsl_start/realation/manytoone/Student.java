@@ -18,19 +18,4 @@ public class Student {
     @ManyToOne
     @JoinColumn(name="SUBJECT_ID")
     private Subject subject;
-    // 단방향 END
-
-    // 양방향 START
-//    @ManyToOne
-//    @JoinColumn(name="SUBJECT_ID")
-//    private Subject subject;
-//
-//    public void setSubject(Subject subject) {
-//        this.subject = subject;
-//
-//        if(!subject.getStudents().contains(this)){
-//            subject.getStudents().add(this);
-//        }
-//    }
-    // 양방향 END
 }

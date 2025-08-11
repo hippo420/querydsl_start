@@ -14,17 +14,4 @@ public class Subject {
     private Long id;
     private String name;
 
-
-    // 양방향 START
-//    @OneToMany(mappedBy = "subject")
-//    private List<Student> students = new ArrayList<Student>();
-//
-//    public void addStudent(Student student) {
-//        this.students.add(student);
-//        if(student.getSubject() != this)
-//        {
-//            student.setSubject(this);
-//        }
-//    }
-    // 양방향 END
 }

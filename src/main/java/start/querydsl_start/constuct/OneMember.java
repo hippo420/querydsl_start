@@ -1,4 +1,4 @@
-package start.querydsl_start.realation;
+package start.querydsl_start.constuct;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
