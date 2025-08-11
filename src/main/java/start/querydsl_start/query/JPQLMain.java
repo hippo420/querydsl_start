@@ -1,0 +1,4 @@
+package start.querydsl_start.query;
+
+public class JPQLMain {
+}
