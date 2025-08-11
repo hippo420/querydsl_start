@@ -21,11 +21,13 @@ public class SubjectV1 {
     private String name;
 
     // 양방향 START
+    //@OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
     @OneToMany(mappedBy = "subject")
     private List<StudentV1> students = new ArrayList<StudentV1>();
 
     public void addStudent(StudentV1 student) {
         this.students.add(student);
+
         if(student.getSubject() != this)
         {
             student.setSubject(this);

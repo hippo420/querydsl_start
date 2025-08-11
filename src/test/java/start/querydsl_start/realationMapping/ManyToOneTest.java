@@ -9,7 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import start.querydsl_start.realation.manytoone.Student;
+import start.querydsl_start.realation.manytoone.StudentV1;
 import start.querydsl_start.realation.manytoone.Subject;
+import start.querydsl_start.realation.manytoone.SubjectV1;
 
 import java.util.List;
 @Slf4j
@@ -66,21 +68,31 @@ public class ManyToOneTest {
     @Rollback(false)
     void testManyToOne_OneToMany()
     {
+        // given
+        SubjectV1 subject = new SubjectV1();
+        subject.setName("수학");
 
+        StudentV1 student1 = new StudentV1();
+        student1.setName("홍길동");
 
-        em.persist(null);
+        StudentV1 student2 = new StudentV1();
+        student2.setName("김철수");
+
+        // 연관관계 설정 (편의 메서드 활용)
+        subject.addStudent(student1);
+        subject.addStudent(student2);
+
+        em.persist(subject); // cascade가 없으니 학생도 개별 persist 필요
+        em.persist(student1);
+        em.persist(student2);
 
         em.flush();
         em.clear();
 
+        SubjectV1 res = em.find(SubjectV1.class, subject.getId());
 
-
-        //조회
-        List<Object> res1 = em.createQuery("select m from Stock m", Object.class)
-                .getResultList();
-
-
-        res1.stream().forEach(r -> System.out.println(r));
+        log.info("SubjectV1 = {}",res);
+        log.info("getStudents() = {}",res.getStudents());
     }
 
 }

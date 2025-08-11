@@ -17,6 +17,7 @@ public class StudentV1 {
     private String name;
 
     //양방향 START
+    //@ManyToOne(fetch = FetchType.LAZY)
     @ManyToOne
     @JoinColumn(name="SUBJECT_ID")
     private SubjectV1 subject;
