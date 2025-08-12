@@ -56,6 +56,8 @@ public class OneToManyTest {
 
         log.info("게시물 : {}", post);
         post.getAttachments().forEach(a -> {log.info("첨부 : {}",a);});
+
+        //log.info("첨부파일에서 게시물조회 불가 : {}", post.getAttachments().get(0).getPost());
     }
 
 
@@ -65,36 +67,32 @@ public class OneToManyTest {
     @Rollback(false)
     void testManyToOne_OneToMany()
     {
-
-
         AttachmentV1 att1 = new AttachmentV1();
         att1.setName("파일1");
-        em.persist(att1);
+        em.persist(att1); //cascase시 불필요
 
         AttachmentV1 att2 = new AttachmentV1();
         att2.setName("파일2");
-        em.persist(att2);
+        em.persist(att2); //cascase시 불필요
 
         // 저장
         PostV1 post = new PostV1();
         post.setName("게시글1");
-
         post.getAttachments().add(att1);
         post.getAttachments().add(att2);
 
-        em.persist(post); // Post 저장 -> attachments도 함께 INSERT
+        em.persist(post); //cascase시 일괄 persist
 
         em.flush();
         em.clear();
 
-
-
         //조회
         PostV1 foundPost = em.find(PostV1.class, post.getId());
-        log.info("{}",foundPost.getAttachments()); // 첨부파일 목록 출력
+        log.info("게시물에서 첨부파일 조회 :{}",foundPost.getAttachments());
 
         AttachmentV1 foundAttachment = em.find(AttachmentV1.class, att1.getId());
-        log.info("{}",foundAttachment.getPost().getName()); // "게시글1"
+        log.info("첨부파일에서 게시물 조회 :{}",foundAttachment.getPost());
+
     }
 
 }
