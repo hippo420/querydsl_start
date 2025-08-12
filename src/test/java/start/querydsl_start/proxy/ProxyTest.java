@@ -40,12 +40,12 @@ public class ProxyTest {
 
         Employee emp2 = new Employee();
         emp2.setName("괴발자");
-        emp1.setDepartment(dept1);
+        emp2.setDepartment(dept1);
         em.persist(emp1);
 
         Employee emp3 = new Employee();
         emp3.setName("Non개발자");
-        emp1.setDepartment(dept2);
+        emp3.setDepartment(dept2);
         em.persist(emp3);
 
         em.flush();

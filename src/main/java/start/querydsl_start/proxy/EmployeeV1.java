@@ -8,7 +8,7 @@ import lombok.ToString;
 @Entity
 @Getter @Setter
 @ToString(of ={"id","name","department"})
-public class Employee {
+public class EmployeeV1 {
     @Id
     @GeneratedValue
     @Column(name="EMPLOYEE_ID")
@@ -17,6 +17,6 @@ public class Employee {
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="DEPARTMENT_ID", nullable = false)
+    @JoinColumn(name="DEPARTMENT_ID", nullable = true)
     private Department department;
 }

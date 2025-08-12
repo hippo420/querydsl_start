@@ -12,12 +12,13 @@ import lombok.ToString;
 public class Invoice {
     @Id
     @GeneratedValue
-    @Column(name="INVOICE_ID")
+    @Column(name = "INVOICE_ID")
     private Long id;
 
     private String name;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="INVOICE_LINE_ID")
+    @JoinColumn(name = "INVOICE_LINE_ID")
     private InvoiceLine invoiceLine;
+
 }
