@@ -26,7 +26,6 @@ public class ProxyStatusTest {
     @Rollback(false)
     void testProxy()
     {
-
         InvoiceLine invoiceLine = new InvoiceLine();
         invoiceLine.setName("노트북");
         invoiceLine.setQty(300L);

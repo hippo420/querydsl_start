@@ -94,12 +94,11 @@ public class ProxyTest {
     void testLazyLoading()
     {
         InvoiceLine invoiceLine = new InvoiceLine();
-        invoiceLine.setId(1L);
         invoiceLine.setName("노트북");
         invoiceLine.setQty(300L);
+        em.persist(invoiceLine);
 
         Invoice invoice = new Invoice();
-        invoice.setId(1L);
         invoice.setName("1234-구매청구서");
         invoice.setInvoiceLine(invoiceLine);
         em.persist(invoice);
