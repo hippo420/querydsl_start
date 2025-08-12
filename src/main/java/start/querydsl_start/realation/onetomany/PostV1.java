@@ -11,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
-@ToString(of = {"id","name","posts"})
+@ToString(of = {"id","name"})
 public class PostV1 {
     @Id
     @GeneratedValue
@@ -20,8 +20,7 @@ public class PostV1 {
 
     private String name;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name="POST_ID")
-    private List<Attachment> attachments = new ArrayList<Attachment>();
-
+    private List<AttachmentV1> attachments = new ArrayList<AttachmentV1>();
 }
