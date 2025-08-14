@@ -3,12 +3,14 @@ package start.querydsl_start.proxy.orphan;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter @Setter
+@ToString(of={"id","name","containers"})
 public class Docker {
     @Id
     @GeneratedValue
@@ -18,6 +20,6 @@ public class Docker {
     private String name;
 
     @OneToMany(orphanRemoval = true)
-    @JoinColumn(name="CONTAINER_ID")
-    private List<Container> contaners = new ArrayList<>();
+    @JoinColumn(name="DOCKER_ID")
+    private List<Container> containers = new ArrayList<>();
 }
