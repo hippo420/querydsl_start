@@ -56,7 +56,7 @@ public class EntityInheritTest {
         List<Book> res2 = em.createQuery("select m from Book m", Book.class)
                 .getResultList();
         //조회, DTYPE이 설정된 경우, JPA가 각 행에 저장된 클래스 타입을 구분하는 컬럼을 자동 생성 
-        List<Item> res3 = em.createQuery("select m from Item m", Item.class)
+        List<Item> res3 = em.createQuery("select m from ItemStock m", Item.class)
                 .getResultList();
 
         res1.stream().forEach(r1 -> log.info("Result1: {}", r1));

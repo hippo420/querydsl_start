@@ -11,7 +11,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(of={"id","name"})
-public class Item {
+public class ItemStock {
     @Id
     @GeneratedValue
     private Long id;
