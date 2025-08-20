@@ -1,17 +1,17 @@
 package start.querydsl_start.query.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString(of={"id","name","fund"})
-public class Imc {
+@ToString(of={"id","name"})
+public class Item {
     @Id
     @GeneratedValue
     private Long id;

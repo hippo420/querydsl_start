@@ -7,16 +7,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @ToString(of={"id","name"})
-public class FundV1 {
+public class TradeOrder {
     @Id
     @GeneratedValue
     private Long id;
 
     private String name;
-
-
 }
