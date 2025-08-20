@@ -28,7 +28,7 @@ public class SpringDataJpaTest {
     PlayerRepository repository;
 
     @Test
-    @DisplayName("스프링데이터JPA - [입력/조회] 테스트")
+    @DisplayName("스프링데이터JPA - [NamedQuery] 테스트")
     @Transactional
     @Rollback(false)
     void testJpa_V1()
