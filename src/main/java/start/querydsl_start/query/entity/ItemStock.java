@@ -17,4 +17,8 @@ public class ItemStock {
     private Long id;
 
     private String name;
+
+    private long quantity;
+
+
 }

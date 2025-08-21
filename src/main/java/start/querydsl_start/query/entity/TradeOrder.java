@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Setter
@@ -17,4 +19,8 @@ public class TradeOrder {
     private Long id;
 
     private String name;
+
+    private BigDecimal price;
+
+    private BigDecimal quantity;
 }

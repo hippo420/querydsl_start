@@ -24,4 +24,8 @@ public class Firm {
     @JoinColumn(name="TRADER_ID")
     private List<Trader> traders = new ArrayList<>();
 
+    public Firm() {}
+    public Firm(String name) {
+        this.name = name;
+    }
 }

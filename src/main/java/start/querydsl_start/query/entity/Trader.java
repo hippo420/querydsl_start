@@ -5,10 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
+
 
 @Entity
 @Getter @Setter
-@ToString(of={"id","username","age","firm"})
+@ToString(of={"id","username","age","firm","salary"})
 public class Trader {
     @Id
     @GeneratedValue
@@ -22,4 +24,14 @@ public class Trader {
     @JoinColumn(name="firm")
     private Firm firm;
 
+    private BigDecimal salary;
+
+    public Trader() {}
+
+    public Trader(String username, int age, Firm firm, BigDecimal salary) {
+        this.username = username;
+        this.age = age;
+        this.firm = firm;
+        this.salary = salary;
+    }
 }
