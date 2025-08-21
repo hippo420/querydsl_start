@@ -86,34 +86,28 @@ public class JpqlSampleTest {
     }
 
     @Test
-    @DisplayName("JPQL-[SELECT-where] 테스트")
-    @Transactional
-    @Rollback(false)
-    void testJPQL_V1_1()
-    {
-        //GROUPBY
-        String sql = "select m from Player m where m.type=:type";
-
-        List<Player> players = em.createQuery(sql,Player.class)
-                .setParameter("type","야구")
-                .getResultList();
-        players.forEach(p -> log.info("{}",p));
-
-    }
-
-    @Test
-    @DisplayName("JPQL-[SELECT-where] 테스트")
+    @DisplayName("JPQL-[SELECT-HAVING] 테스트")
     @Transactional
     @Rollback(false)
     void testJPQL_V1_2()
     {
         //HAVING
-        String sql = "select m from Player m where m.type=:type";
+        // Firm별 평균 salary 계산 후, 평균이 3000 이상인 Firm만 조회
+        String jpql = "select t.firm.name, avg(t.salary) " +
+                "from Trader t " +
+                "group by t.firm.name " +
+                "having avg(t.salary) >= 3000 " +
+                "order by avg(t.salary) desc";
 
-        List<Player> players = em.createQuery(sql,Player.class)
-                .setParameter("type","야구")
+        List<Object[]> resultList = em.createQuery(jpql, Object[].class)
                 .getResultList();
-        players.forEach(p -> log.info("{}",p));
+
+        for (Object[] row : resultList) {
+            String firmName = (String) row[0];
+            Double average  = (Double) row[1];
+
+            log.info("Firm={}, avgSalary={}", firmName, average);
+        }
 
     }
 
@@ -147,21 +141,6 @@ public class JpqlSampleTest {
         results.forEach(p -> log.info("{}",p));
     }
 
-
-    @Test
-    @DisplayName("JPQL-[SELECT-where] 테스트")
-    @Transactional
-    @Rollback(false)
-    void testJPQL_V1_3()
-    {
-        //ORDER BY
-        String sql = "select m from Player m  order by m.age ASC , m.id DESC";
-
-        List<Player> players = em.createQuery(sql,Player.class)
-                .getResultList();
-        players.forEach(p -> log.info("{}",p));
-
-    }
 
     @Test
     @DisplayName("JPQL-[UPDATE] 테스트")
@@ -215,8 +194,8 @@ public class JpqlSampleTest {
     void testJPQL_V4()
     {
         //ORDER BY
-        String sql = "select new start.querydsl_start.query.entity.TraderDTO(m.username, m.age) " +
-                        "from Trader m  order by m.age ASC , m.id DESC";
+        String sql = "select new start.querydsl_start.query.entity.dto.TraderDTO(m.username, m.age) " +
+"from Trader m  order by m.age ASC , m.id DESC";
 
         List<TraderDTO> traderDTO = em.createQuery(sql, TraderDTO.class)
                 .getResultList();
