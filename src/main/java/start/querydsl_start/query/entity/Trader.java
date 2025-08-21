@@ -21,7 +21,7 @@ public class Trader {
     private int age;
 
     @ManyToOne
-    @JoinColumn(name="firm")
+    @JoinColumn(name = "FIRM_ID")
     private Firm firm;
 
     private BigDecimal salary;

@@ -20,12 +20,16 @@ public class Firm {
 
     private String name;
 
-    @OneToMany(mappedBy="")
-    @JoinColumn(name="TRADER_ID")
+    @OneToMany(mappedBy="firm")
     private List<Trader> traders = new ArrayList<>();
 
     public Firm() {}
     public Firm(String name) {
         this.name = name;
+    }
+
+    public void addTrader(Trader trader) {
+        traders.add(trader);
+        trader.setFirm(this); // 양방향 편의 메서드
     }
 }
