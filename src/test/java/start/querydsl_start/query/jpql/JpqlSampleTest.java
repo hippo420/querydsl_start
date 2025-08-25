@@ -138,7 +138,13 @@ public class JpqlSampleTest {
 
         Query query = em.createQuery(sql).setParameter("type","야구");
         List results = query.getResultList();
-        results.forEach(p -> log.info("{}",p));
+        // Object를 Player로 캐스팅
+        for (Object obj : results) {
+            Player p = (Player) obj;
+            System.out.println(p.getName() + " / " + p.getType());
+        }
+
+
     }
 
 
@@ -158,7 +164,7 @@ public class JpqlSampleTest {
 
         int cnt = em.createQuery(sql).executeUpdate();
 
-        em.clear();
+        //em.clear();
 
         List<Player> players1 =em.createQuery(sql1,Player.class).getResultList();
         System.out.println("update -"+cnt+"건");
@@ -195,7 +201,7 @@ public class JpqlSampleTest {
     {
         //ORDER BY
         String sql = "select new start.querydsl_start.query.entity.dto.TraderDTO(m.username, m.age) " +
-"from Trader m  order by m.age ASC , m.id DESC";
+        "from Trader m  order by m.age ASC , m.id DESC";
 
         List<TraderDTO> traderDTO = em.createQuery(sql, TraderDTO.class)
                 .getResultList();

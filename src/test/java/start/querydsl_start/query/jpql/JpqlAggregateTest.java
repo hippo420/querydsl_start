@@ -60,30 +60,30 @@ public class JpqlAggregateTest {
     @Rollback(false)
     void testJPQL_GroupFunction() {
         // JPQL (Firm별 salary 평균, 합계, 최댓값, 최솟값, 인원수)
-        String jpql = "select t.firm.name, " +
-                "       count(t), " +
-                "       sum(t.salary), " +
-                "       avg(t.salary), " +
-                "       max(t.salary), " +
-                "       min(t.salary) " +
-                "from Trader t " +
-                "group by t.firm.name " +
-                "order by avg(t.salary) desc";
+String jpql = "select t.firm.name, " +
+        "       count(t), " +
+        "       sum(t.salary), " +
+        "       avg(t.salary), " +
+        "       max(t.salary), " +
+        "       min(t.salary) " +
+        "from Trader t " +
+        "group by t.firm.name " +
+        "order by avg(t.salary) desc";
 
-        List<Object[]> resultList = em.createQuery(jpql, Object[].class)
-                .getResultList();
+List<Object[]> resultList = em.createQuery(jpql, Object[].class)
+        .getResultList();
 
-        for (Object[] row : resultList) {
-            String firmName   = (String) row[0];
-            Long traderCount  = (Long) row[1];
-            BigDecimal total  = (BigDecimal) row[2];
-            Double average    = (Double) row[3];
-            BigDecimal max    = (BigDecimal) row[4];
-            BigDecimal min    = (BigDecimal) row[5];
+for (Object[] row : resultList) {
+    String firmName   = (String) row[0];
+    Long traderCount  = (Long) row[1];
+    BigDecimal total  = (BigDecimal) row[2];
+    Double average    = (Double) row[3];
+    BigDecimal max    = (BigDecimal) row[4];
+    BigDecimal min    = (BigDecimal) row[5];
 
-            log.info("증권사(firm) : {}, 인원수(count) : {}명, 총 급여(sum) : {}원, 평균급여(avg) : {}원, 최대급여(max) : {}원, 최소급여(min)={}원",
-                    firmName, traderCount, total, average, max, min);
-        }
+    log.info("증권사(firm) : {}, 인원수(count) : {}명, 총 급여(sum) : {}원, 평균급여(avg) : {}원, 최대급여(max) : {}원, 최소급여(min)={}원",
+            firmName, traderCount, total, average, max, min);
+}
     }
 
     @Test
