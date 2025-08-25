@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
+import start.querydsl_start.proxy.eager.License;
+import start.querydsl_start.query.entity.Account;
 import start.querydsl_start.query.entity.Firm;
 import start.querydsl_start.query.entity.Trader;
 
@@ -38,11 +40,16 @@ public class JpqlJoinTest {
         Trader t4 = new Trader("choi", 28, mirae, new BigDecimal("3000"));
         Trader t5 = new Trader("jung", 35, samsung, new BigDecimal("2000"));
 
+        Account l1 = new Account("kim","203219-23-123821");
+        Account l2 = new Account("park","203432-00-11111");
         em.persist(t1);
         em.persist(t2);
         em.persist(t3);
         em.persist(t4);
         em.persist(t5);
+
+        em.persist(l1);
+        em.persist(l2);
 
         em.flush();
         em.clear();
@@ -84,16 +91,16 @@ public class JpqlJoinTest {
     @Transactional
     @Rollback(false)
     void testJPQL_ThetaJoin() {
-        String jpql = "select t, f from Trader t, Firm f " +
-                "where t.username = f.name";  // 단순 조건 매칭
+        String jpql = "select t, l from Trader t, Account l " +
+                "where t.username = l.tradername";
 
         List<Object[]> result = em.createQuery(jpql, Object[].class)
                 .getResultList();
 
         for (Object[] row : result) {
             Trader trader = (Trader) row[0];
-            Firm firm = (Firm) row[1];
-            log.info("ThetaJoin => Trader={}, Firm={}", trader.getUsername(), firm.getName());
+            Account acct = (Account) row[1];
+            log.info("ThetaJoin => Trader={}, Account={}", trader.getUsername(), acct);
         }
     }
 
