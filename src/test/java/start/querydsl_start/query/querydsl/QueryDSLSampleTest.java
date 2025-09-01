@@ -38,7 +38,7 @@ public class QueryDSLSampleTest {
     void initData() {
         // 테스트 클래스 실행 전에 딱 한 번 실행됨
         System.out.println("before all");
-        Player p1 = new Player("손흥민",33,"축구",10000L,"LA Galuxy Football");
+        Player p1 = new Player("손흥민",33,"축구",10000L,"la Galuxy Football");
         Player p2 = new Player("오나티 쇼헤이",24,"야구",30000L,"LA 다저스");
         Player p21 = new Player("김혜성",25,"야구",2000L,"LA 다저스");
         Player p3 = new Player("스테판 커리",30,"농구",5000L,"LA 레이커스");
@@ -141,7 +141,8 @@ public class QueryDSLSampleTest {
         //WHERE
         QPlayer p = QPlayer.player;
 
-        //equal, not equal
+        //equal
+        log.info("Equal");
         List<Player> players = jpaQueryFactory
                 .select(p)
                 .from(p)
@@ -149,6 +150,17 @@ public class QueryDSLSampleTest {
                 .fetch();
 
         players.forEach(player -> log.info("{}",player));
+
+        //not equal
+        log.info("Not Equal");
+        List<Player> players1 = jpaQueryFactory
+                .select(p)
+                .from(p)
+                .where(p.type.ne("야구"))
+                //.where(p.type.eq("야구").not())
+                .fetch();
+
+        players1.forEach(player -> log.info("{}",player));
 
     }
 
@@ -159,13 +171,23 @@ public class QueryDSLSampleTest {
     void testQuertDSL_SELECT_COND2() {
         //WHERE
         QPlayer p = QPlayer.player;
-        //in, not in
+
+        log.info("In");
         List<Player> players = jpaQueryFactory
                 .select(p)
                 .from(p)
-                .where(p.type.eq("야구"), p.age.gt(24))
+                .where(p.type.in("축구"))
                 .fetch();
         players.forEach(player -> log.info("{}",player));
+
+        log.info("Not In");
+        List<Player> players1 = jpaQueryFactory
+                .select(p)
+                .from(p)
+                .where(p.type.notIn("야구","축구"))
+                .fetch();
+        players1.forEach(player -> log.info("{}",player));
+
     }
 
     @Test
@@ -177,10 +199,11 @@ public class QueryDSLSampleTest {
         QPlayer p = QPlayer.player;
 
         //between
+        log.info("Between");
         List<Player> players3= jpaQueryFactory
                 .select(p)
                 .from(p)
-                .where(p.type.eq("야구").or(p.type.eq("축구")))
+                .where(p.salary.between(4000L,10000L))
                 .fetch();
 
         players3.forEach(player -> log.info("{}",player));
@@ -194,7 +217,7 @@ public class QueryDSLSampleTest {
         //WHERE
         QPlayer p = QPlayer.player;
 
-        //between
+        log.info("gt, lt, loe, goe");
         List<Player> players= jpaQueryFactory
                 .select(p)
                 .from(p)
@@ -212,7 +235,7 @@ public class QueryDSLSampleTest {
         //WHERE
         QPlayer p = QPlayer.player;
 
-        //between
+        log.info("Like");
         List<Player> players= jpaQueryFactory
                 .select(p)
                 .from(p)
@@ -220,6 +243,24 @@ public class QueryDSLSampleTest {
                 .fetch();
 
         players.forEach(player -> log.info("{}",player));
+
+        log.info("contains : %XX%");
+        List<Player> players1= jpaQueryFactory
+                .select(p)
+                .from(p)
+                .where(p.team.contains("LA"))
+                .fetch();
+
+        players1.forEach(player -> log.info("{}",player));
+
+        log.info("startsWith{IgnoreCase} : XXX%, endsWith{IgnoreCase} : %XXX");
+        List<Player> players2= jpaQueryFactory
+                .select(p)
+                .from(p)
+                .where(p.team.startsWithIgnoreCase("la"))
+                .fetch();
+
+        players2.forEach(player -> log.info("{}",player));
     }
 
 

@@ -2,30 +2,30 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.4.7'
     id 'io.spring.dependency-management' version '1.1.7'
-
-    // EWERK QueryDSL 플러그인
-    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
 }
 
 group   = 'start'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    toolchain { languageVersion = JavaLanguageVersion.of(21) }
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 /* ----------------------------------------------------------------
- * 1. 버전·경로 상수
+ * 1. 버전 상수
  * ---------------------------------------------------------------- */
 ext {
-    querydslVersion   = '5.1.0'           // 5.1.0은 5.x 최신 안정판 :contentReference[oaicite:0]{index=0}
-    querydslSrcDir    = "$buildDir/generated/querydsl"
+    querydslVersion = '5.1.0'
 }
 
 /* ----------------------------------------------------------------
  * 2. 저장소
  * ---------------------------------------------------------------- */
-repositories { mavenCentral() }
+repositories {
+    mavenCentral()
+}
 
 /* ----------------------------------------------------------------
  * 3. 의존성
@@ -36,59 +36,39 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     runtimeOnly     'com.h2database:h2'
 
-    /* QueryDSL (jakarta 네임스페이스) */
-    implementation     "com.querydsl:querydsl-jpa:${querydslVersion}:jakarta"
+    /* QueryDSL (Jakarta 네임스페이스) */
+    implementation      "com.querydsl:querydsl-jpa:${querydslVersion}:jakarta"
     annotationProcessor "com.querydsl:querydsl-apt:${querydslVersion}:jakarta"
-    annotationProcessor 'jakarta.persistence:jakarta.persistence-api'   // Entity 어노테이션
-    annotationProcessor 'jakarta.annotation:jakarta.annotation-api'     // @Generated 등
+    annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
+    annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+
+    /* SQL 로그용 */
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 
     /* Lombok */
-    compileOnly         'org.projectlombok:lombok'
-    annotationProcessor  'org.projectlombok:lombok'
+    compileOnly            'org.projectlombok:lombok'
+    annotationProcessor     'org.projectlombok:lombok'
     testCompileOnly         'org.projectlombok:lombok'
-    testAnnotationProcessor  'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
     /* 테스트 */
-    testImplementation  'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly     'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly    'org.junit.platform:junit-platform-launcher'
 }
 
 /* ----------------------------------------------------------------
  * 4. 설정 병합
  * ---------------------------------------------------------------- */
 configurations {
-    /* 컴파일 전용 → annotationProcessor도 같이 물려준다 */
-    compileOnly { extendsFrom annotationProcessor }
-
-    /* QueryDSL 전용 classpath (플러그인이 참조) */
-    querydsl { extendsFrom annotationProcessor }
+    /* compileOnly에 annotationProcessor 상속 */
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 /* ----------------------------------------------------------------
- * 5. QueryDSL 플러그인 추가 설정
+ * 5. 테스트 플랫폼
  * ---------------------------------------------------------------- */
-querydsl {
-    jpa               = true
-    querydslSourcesDir = querydslSrcDir
+tasks.named('test') {
+    useJUnitPlatform()
 }
-
-/* ----------------------------------------------------------------
- * 6. 소스셋에 생성된 Q‑클래스 경로 추가
- * ---------------------------------------------------------------- */
-sourceSets {
-    main { java.srcDir querydslSrcDir }
-}
-
-/* ----------------------------------------------------------------
- * 7. 태스크 연결
- *    - compileQuerydsl 태스크가 annotationProcessorPath 를 알도록 설정
- * ---------------------------------------------------------------- */
-tasks.named('compileQuerydsl') {
-    options.annotationProcessorPath = configurations.querydsl
-}
-
-/* ----------------------------------------------------------------
- * 8. 테스트 플랫폼
- * ---------------------------------------------------------------- */
-tasks.named('test') { useJUnitPlatform() }
