@@ -1,11 +1,11 @@
 package start.querydsl_start.query.querydsl;
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceUnit;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,32 +14,24 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import start.querydsl_start.entity.QTeam;
 import start.querydsl_start.jpa.entity.Player;
-import start.querydsl_start.jpa.entity.QPlayer;
 import start.querydsl_start.query.entity.Firm;
-import start.querydsl_start.query.entity.QFirm;
 import start.querydsl_start.query.entity.QTrader;
 import start.querydsl_start.query.entity.Trader;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-import static start.querydsl_start.entity.QTeam.team;
-
 @Slf4j
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class QueryDSLJoinTest {
+public class QueryDSLStringTest {
 
 
     @PersistenceContext
     EntityManager em;
 
     JPAQueryFactory jpaQueryFactory;
-
-    @PersistenceUnit
-    EntityManagerFactory emf;
 
     @BeforeEach
     void initData() {
@@ -50,7 +42,6 @@ public class QueryDSLJoinTest {
         Player p21 = new Player("김혜성",25,"야구",2000L,"LA 다저스");
         Player p3 = new Player("스테판 커리",30,"농구",5000L,"LA 레이커스");
         Player p4 = new Player("막스 페르스타펀",28,"F1 레이싱",2000L,"F1 레드불 레이싱");
-        Player p5 = new Player("헤밀턴",28,"F1 레이싱",2000L,"JP Morgan");
 
         Firm f1 = new Firm("Goldman Sachs");
         Firm f2 = new Firm("Morgan Stanley");
@@ -70,8 +61,8 @@ public class QueryDSLJoinTest {
                 new Trader("henry", 32, f2, BigDecimal.valueOf(7500)),
                 new Trader("irene", 29, f3, BigDecimal.valueOf(6800)),
                 new Trader("jack", 31, f1, BigDecimal.valueOf(8100)),
-                new Trader("jackson", 22, null, null),
-                new Trader("boxer", 22, null, null)
+                new Trader("jackson", 22, f1, null),
+                new Trader("boxer", 22, f1, null)
         );
 
         traders.forEach(em::persist);
@@ -82,7 +73,6 @@ public class QueryDSLJoinTest {
         em.persist(p21);
         em.persist(p3);
         em.persist(p4);
-        em.persist(p5);
         em.flush();
         em.clear();
 
@@ -91,121 +81,130 @@ public class QueryDSLJoinTest {
 
 
     @Test
-    @DisplayName("QueryDSL-[Join(Inner)] 테스트")
+    @DisplayName("QueryDSL-[상수] 테스트")
     @Transactional
     @Rollback(false)
-    void testQuertDSL_InnerJoin()
+    void testQuertDSL_Constant()
     {
         //WHERE
         QTrader t = QTrader.trader;
-        QFirm f = QFirm.firm;
 
-        List<Trader> traders = jpaQueryFactory
-                .select(t)
+        List<Tuple> results = jpaQueryFactory
+                .select(t.username, Expressions.constant("테스트"))
                 .from(t)
-                .join(t.firm, f)
-                .where(f.name.eq("Goldman Sachs"))
                 .fetch();
 
-        traders.forEach(trader -> log.info("{}",trader));
+        results.forEach(r -> log.info("{}",r));
 
     }
 
     @Test
-    @DisplayName("QueryDSL-[외부조인-LeftJoin] 테스트")
+    @DisplayName("QueryDSL-[CONCAT] 테스트")
     @Transactional
     @Rollback(false)
-    void testQuertDSL_LeftJoin()
+    void testQuertDSL_Concat()
     {
         //WHERE
         QTrader t = QTrader.trader;
-        QFirm f = QFirm.firm;
-//where 절에는 조건처리하면 innerJoin으로 동작함
-//        List<Tuple> traders = jpaQueryFactory
-//                .select(t,f)
-//                .from(t)
-//                .leftJoin(t.firm, f)
-//                .where(f.name.eq("Goldman Sachs"))
-//                .fetch();
+
+        List<String> concatResults = jpaQueryFactory
+                .select(t.username.concat(" (").concat(t.firm.name).concat(")"))
+                .from(t)
+                .fetch();
+
+        concatResults.forEach(r -> log.info("CONCAT 테스트 -> {}", r));
+
+    }
+
+    @Test
+    @DisplayName("QueryDSL-[SUBSTRING] 테스트")
+    @Transactional
+    @Rollback(false)
+    void testQuertDSL_SUBSTRING()
+    {
+        //WHERE
+        QTrader t = QTrader.trader;
+
+        List<Tuple> substrResults = jpaQueryFactory
+                .select(t.username,t.username.substring(0, 3) )// 0~2 인덱스까지
+                .from(t)
+                .fetch();
+        substrResults.forEach(r -> log.info("SUBSTRING(0,3) 테스트 -> {}", r));
+
+    }
+
+    @Test
+    @DisplayName("QueryDSL-[LENGTH] 테스트")
+    @Transactional
+    @Rollback(false)
+    void testQuertDSL_LENGTH()
+    {
+        //WHERE
+        QTrader t = QTrader.trader;
+
+        List<Tuple> lengthResults = jpaQueryFactory
+                .select(t.username, t.username.length())
+                .from(t)
+                .fetch();
+        lengthResults.forEach(r -> log.info("LENGTH 테스트 -> {}", r));
+
+    }
+
+    @Test
+    @DisplayName("QueryDSL-[UPPER, LOWER] 테스트")
+    @Transactional
+    @Rollback(false)
+    void testQuertDSL_UPPERLOWER()
+    {
+        //WHERE
+        QTrader t = QTrader.trader;
 
         List<Tuple> traders = jpaQueryFactory
-                .select(t,f)
+                .select(t.username.upper()
+                        , t.firm.name.lower())
                 .from(t)
-                .leftJoin(t.firm, f)
-                .on(f.name.eq("Goldman Sachs"))
                 .fetch();
-
-        traders.forEach(trader -> log.info("{}",trader));
+        traders.forEach(r -> log.info("UPPER, LOWER 테스트 -> {}", r));
 
     }
 
     @Test
-    @DisplayName("QueryDSL-[외부조인-RightJoin] 테스트")
+    @DisplayName("QueryDSL-[TRIM] 테스트")
     @Transactional
     @Rollback(false)
-    void testQuertDSL_RightJoin()
+    void testQuertDSL_TRIM()
     {
         //WHERE
         QTrader t = QTrader.trader;
-        QFirm f = QFirm.firm;
 
-        List<Tuple> traders = jpaQueryFactory
-                .select(t,f)
+        List<String> traders = jpaQueryFactory
+                .select(t.username.concat("           ").trim())
                 .from(t)
-                .rightJoin(t.firm, f)
-                .on(f.name.eq("Goldman Sachs"))
                 .fetch();
-
-        traders.forEach(trader -> log.info("{}",trader));
-
-    }
-
-
-    @Test
-    @DisplayName("QueryDSL-[외부조인-TheraJoin] 테스트")
-    @Transactional
-    @Rollback(false)
-    void testQuertDSL_ThetaJoin()
-    {
-        //WHERE
-        QPlayer p = QPlayer.player;
-        QFirm f = QFirm.firm;
-
-        List<Tuple> traders = jpaQueryFactory
-                .select(p,f)
-                .from(p,f)
-                .where(p.team.eq(f.name))
-                .fetch();
-
-        traders.forEach(trader -> log.info("{}",trader));
+        traders.forEach(r -> log.info("TRIM 테스트 -> |{}|", r));
 
     }
 
     @Test
-    @DisplayName("QueryDSL-[FetchJoin] 테스트")
+    @DisplayName("QueryDSL-[REPLACE] 테스트")
     @Transactional
     @Rollback(false)
-    void testQuertDSL_FetchJoin()
+    void testQuertDSL_REPLACE()
     {
         //WHERE
         QTrader t = QTrader.trader;
-        QFirm f = QFirm.firm;
 
-        List<Trader> traders = jpaQueryFactory
-                .select(t)
+        List<String> traders = jpaQueryFactory
+                .select(Expressions.stringTemplate(
+                        "replace({0}, {1}, {2})",
+                        t.username, // 원본 컬럼
+                        "a",        // 바꿀 문자열
+                        "에이"      // 대체할 문자열
+                ))
                 .from(t)
-                .join(t.firm, f).fetchJoin()
-                //.join(t.firm, f)
-                .where(f.name.eq("Goldman Sachs"))
                 .fetch();
 
-        for (Trader trader : traders) {
-            log.info("트레이더 : {}",trader.getUsername());
-            log.info("연   봉 : {}원",trader.getSalary());
-            boolean loaded = emf.getPersistenceUnitUtil().isLoaded(trader.getFirm());
-            log.info("회사정보 로딩여부 : {}",loaded);
-        }
-
+        traders.forEach(r -> log.info("REPLACE 테스트 -> {}", r));
 
     }
 

@@ -20,7 +20,7 @@ public class Trader {
 
     private int age;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FIRM_ID")
     private Firm firm;
 
