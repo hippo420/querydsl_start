@@ -1,7 +1,7 @@
 package start.querydsl_start.query.querydsl;
 
-import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Projections;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -17,17 +17,16 @@ import start.querydsl_start.jpa.entity.Player;
 import start.querydsl_start.query.entity.Firm;
 import start.querydsl_start.query.entity.QTrader;
 import start.querydsl_start.query.entity.Trader;
-import start.querydsl_start.query.entity.dto.QTraderDTO;
-import start.querydsl_start.query.entity.dto.TraderDTO;
-import start.querydsl_start.query.entity.dto.TraderDTOV1;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+import static start.querydsl_start.query.entity.QTrader.trader;
+
 @Slf4j
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class QueryDSLProjectionTest {
+public class QueryDSLDynamicQueryTest {
 
 
     @PersistenceContext
@@ -83,94 +82,64 @@ public class QueryDSLProjectionTest {
 
 
     @Test
-    @DisplayName("QueryDSL-[프로젝션 - 엔티티] 테스트")
+    @DisplayName("QueryDSL-[동적쿼리 - BooleanBuilder] 테스트")
     @Transactional
     @Rollback(false)
-    void testQuertDSL_Entity()
+    void testQuertDSL_BooleanBuilder()
     {
-        //WHERE
-        QTrader t = QTrader.trader;
+        Integer age  = 10;
+        Long salary  = 10000L;
+
+
+        QTrader t = trader;
+
+        BooleanBuilder cond = new BooleanBuilder();
+        cond.and(t.age.gt(age));
+        cond.or(t.salary.gt(salary));
+
         List<Trader> traders = jpaQueryFactory
                 .select(t)
                 .from(t)
+                .where(cond)
                 .fetch();
 
         traders.forEach(trader -> log.info("{}",trader));
 
+
+
     }
 
+
+
     @Test
-    @DisplayName("QueryDSL-[프로젝션 - Tuple] 테스트")
+    @DisplayName("QueryDSL-[동적쿼리 - ] 테스트")
     @Transactional
     @Rollback(false)
-    void ﬁtestQuertDSL_Tuple()
+    void testQuertDSL_Where()
     {
         //WHERE
-        QTrader t = QTrader.trader;
-        Tuple trader = jpaQueryFactory
-                .select(t.username.as("name")
-                        , t.age)
+        QTrader t = trader;
+        Integer age  = 20;
+        BigDecimal salary  = BigDecimal.valueOf(15000);
+
+        List<Trader> traders = jpaQueryFactory
+                .select(t)
                 .from(t)
-                .fetchFirst();
-
-        log.info("name : {}", trader.get(t.username.as("name")));
-        log.info("age : {}", trader.get(t.age));
-
-    }
-
-    @Test
-    @DisplayName("QueryDSL-[프로젝션 - DTO] 테스트")
-    @Transactional
-    @Rollback(false)
-    void testQuertDSL_DTO()
-    {
-        //프로퍼티
-        QTrader t = QTrader.trader;
-        List<TraderDTO> traders = jpaQueryFactory
-                .select(Projections.bean(TraderDTO.class,
-                        t.username,
-                        t.age))
-                .from(t)
-                .fetch();
-
-        traders.forEach(trader -> log.info("{}",trader));
-
-        //필드
-        List<TraderDTOV1> traders1 = jpaQueryFactory
-                .select(Projections.fields(TraderDTOV1.class,
-                        t.username,
-                        t.age))
-                .from(t)
-                .fetch();
-
-        traders1.forEach(trader -> log.info("{}",trader));
-
-        //생성자
-        List<TraderDTO> traders2 = jpaQueryFactory
-                .select(Projections.constructor(TraderDTO.class,
-                        t.username,
-                        t.age))
-                .from(t)
-                .fetch();
-
-        traders2.forEach(trader -> log.info("{}",trader));
-    }
-
-    @Test
-    @DisplayName("QueryDSL-[프로젝션 - DTO(QueryProjection)] 테스트")
-    @Transactional
-    @Rollback(false)
-    void testQuertDSL_DTO_QueryProjection()
-    {
-        //WHERE
-        QTrader t = QTrader.trader;
-        List<TraderDTO> traders = jpaQueryFactory
-                .select(new QTraderDTO(t.username,t.age))
-                .from(t)
+                .where(ageEq(age),salaryEq(salary))
                 .fetch();
 
         traders.forEach(trader -> log.info("{}",trader));
 
     }
+
+
+    private BooleanExpression ageEq(Integer age){
+        return age!= null ? trader.age.eq(age) : null;
+    }
+
+    private BooleanExpression salaryEq(BigDecimal salary){
+        return salary!= null ? trader.salary.eq(salary) : null;
+    }
+
 
 }
