@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Trader 관리</title>
+    <style>
+        body {
+            font-family: "Apple SD Gothic Neo", sans-serif;
+            background-color: #f9fafb;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 16px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .search-box input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+        }
+        .search-box button {
+            background-color: #3182f6;
+            border: none;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .info span {
+            font-size: 14px;
+            color: #333;
+        }
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+        .btn {
+            border: none;
+            border-radius: 12px;
+            padding: 8px 12px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .btn-edit {
+            background: #4cafef;
+            color: #fff;
+        }
+        .btn-delete {
+            background: #f44336;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Trader 관리</h1>
+
+    <!-- 검색 -->
+    <form class="search-box" method="post" action="/findByCond1">
+        <input type="text" name="username" placeholder="이름 검색" value="{{#username}}{{username}}{{/username}}">
+        <input type="number" name="age" placeholder="나이 검색" value="{{#age}}{{age}}{{/age}}">
+        <button type="submit">검색</button>
+    </form>
+
+    <!-- 결과 리스트 -->
+    {{#traders}}
+        <div class="card">
+            <div class="info">
+                <span><strong>이름:</strong> {{#username}}{{username}}{{/username}}{{^username}}-{{/username}}</span>
+                <span><strong>나이:</strong> {{#age}}{{age}}{{/age}}{{^age}}-{{/age}}</span>
+                <span><strong>소속:</strong> {{#firm.name}}{{firm.name}}{{/firm.name}}{{^firm.name}}-{{/firm.name}}</span>
+                <span><strong>연봉:</strong> {{#salary}}{{salary}}{{/salary}}{{^salary}}-{{/salary}}</span>
+            </div>
+        </div>
+    {{/traders}}
+
+    {{^traders}}
+        <p>검색 결과가 없습니다.</p>
+    {{/traders}}
+</div>
+</body>
+</html>

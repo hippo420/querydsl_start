@@ -18,7 +18,7 @@ public class Trader {
 
     private String username;
 
-    private int age;
+    private Integer age;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FIRM_ID")
