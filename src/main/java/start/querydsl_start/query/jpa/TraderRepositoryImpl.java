@@ -1,14 +1,17 @@
 package start.querydsl_start.query.jpa;
 
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
+import start.querydsl_start.query.entity.QFirm;
 import start.querydsl_start.query.entity.QTrader;
 import start.querydsl_start.query.entity.Trader;
 import start.querydsl_start.query.entity.dto.QTraderDTO;
@@ -17,8 +20,10 @@ import start.querydsl_start.query.entity.dto.TraderDTO;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static start.querydsl_start.query.entity.QFirm.*;
+import static start.querydsl_start.query.entity.QTrader.*;
 import static start.querydsl_start.query.entity.QTrader.trader;
-
+@Slf4j
 public class TraderRepositoryImpl implements CustomTraderRepository{
 
     private final JPAQueryFactory queryFactory;
@@ -27,21 +32,25 @@ public class TraderRepositoryImpl implements CustomTraderRepository{
     }
 
     @Override
-    public List<Trader> findByCond(Trader cond) {
-        QTrader trader = QTrader.trader;
+    public List<Trader> findByCond(Integer condAge, BigDecimal condSalary) {
+        QTrader t = trader;
+        QFirm f = firm;
+        log.info("condAge: {}, condSalary: {}",condAge, condSalary);
         return queryFactory
-                .select(trader)
-                .from(trader)
-                .where(gtAge(cond.getAge()), ltSalary(cond.getSalary()))
+                .select(t)
+                .from(t)
+                .join(t.firm, f)
+                .where(gtAge(condAge), ltSalary(condSalary))
                 .fetch();
     }
 
     @Override
-    public Page<TraderDTO> searchPageSimple(Trader cond, Pageable pageable) {
+    public Page<TraderDTO> findPaging1(Trader cond, Pageable pageable) {
 
         QueryResults<TraderDTO>  results = queryFactory
                                     .select(new QTraderDTO(trader.username, trader.age))
                                     .from(trader)
+                                    .join(trader.firm, firm)
                                     .where(gtAge(cond.getAge()), ltSalary(cond.getSalary()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -52,11 +61,12 @@ public class TraderRepositoryImpl implements CustomTraderRepository{
     }
 
     @Override
-    public Page<TraderDTO> searchPageComplex(Trader cond, Pageable pageable) {
+    public Page<TraderDTO> findPaging2(Trader cond, Pageable pageable) {
         //데이터 조회 쿼리
         List<TraderDTO>  content = queryFactory
                 .select(new QTraderDTO(trader.username, trader.age))
                 .from(trader)
+                .join(trader.firm, firm)
                 .where(gtAge(cond.getAge()), ltSalary(cond.getSalary()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -80,6 +90,7 @@ public class TraderRepositoryImpl implements CustomTraderRepository{
         List<TraderDTO>  content = queryFactory
                 .select(new QTraderDTO(trader.username, trader.age))
                 .from(trader)
+                .join(trader.firm, firm)
                 .where(gtAge(cond.getAge()), ltSalary(cond.getSalary()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
