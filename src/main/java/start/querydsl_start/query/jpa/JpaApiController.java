@@ -9,7 +9,7 @@ import start.querydsl_start.query.entity.Trader;
 
 import java.util.List;
 
-@Controller
+@RestController
 @AllArgsConstructor
 @RequestMapping("/jpaApi")
 public class JpaApiController {
@@ -17,12 +17,9 @@ public class JpaApiController {
 
 
     @GetMapping("/findByUsername")
-    public String find(@RequestParam String username, Model model) {
+    public List<Trader> find(@RequestParam String username) {
 
-
-        List<Trader> traders= repository.findByUsername(username);
-        model.addAttribute("traders", traders);
-        return "findAll";
+        return  repository.findByUsername(username);
     }
 
     @GetMapping("/findByCond1View")
@@ -32,12 +29,10 @@ public class JpaApiController {
     }
 
     @PostMapping("/findByCond")
-    public String findByCond1(@ModelAttribute Trader trader, Model model) {
+    public List<Trader> findByCond1(@ModelAttribute Trader trader) {
 
-        List<Trader> traders= repository.findByCond(trader);
-        model.addAttribute("traders", traders);
+        return repository.findByCond(trader);
 
-        return "findByCond";
     }
 
 }
