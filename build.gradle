@@ -45,6 +45,9 @@ dependencies {
     /* SQL 로그용 */
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 
+    /* mustache */
+    implementation 'org.springframework.boot:spring-boot-starter-mustache'
+
     /* Lombok */
     compileOnly            'org.projectlombok:lombok'
     annotationProcessor     'org.projectlombok:lombok'

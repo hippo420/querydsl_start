@@ -1,5 +1,6 @@
 package start.querydsl_start.query.querydsl;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -116,6 +117,28 @@ public class QueryDSLFunctionTest {
         traders.forEach(trader -> log.info("{}",trader));
 
     }
+
+    @Test
+    @DisplayName("QueryDSL-[커스텀 Function] 테스트")
+    @Transactional
+    @Rollback(false)
+    void testQuertDSL_CustomFunc()
+    {
+        //WHERE
+        QTrader t = QTrader.trader;
+
+        List<Tuple> result = jpaQueryFactory
+                .select(
+                        t.username,
+                        Expressions.stringTemplate("function('get_grade', {0})", t.age)
+                )
+                .from(t)
+                .fetch();
+
+        result.forEach(trader -> log.info("{}",trader));
+
+    }
+
 
 
 }
